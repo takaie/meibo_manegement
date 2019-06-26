@@ -1,9 +1,7 @@
 use std::process;
-use std::cmp;
 use std::io::{Write, BufRead, BufReader,BufWriter};
 use std::fs::File;
 
-#[derive(Debug)]
 struct Profile {
     id: u32,
     name: String,
@@ -31,8 +29,6 @@ fn cmd_check(profile_data_store: &mut Vec<Profile>){
 }
 
 fn cmd_print(nitems:i32, profile_data_store: &mut Vec<Profile>){
-
-
     if nitems >= 0 {
         for val in profile_data_store.iter().take(nitems as usize) {
             val.print();
@@ -75,7 +71,7 @@ fn cmd_find(word:String, profile_data_store: &mut Vec<Profile>){
     }
 }
     
-fn cmd_sort(n:u32, profile_data_store: &mut Vec<Profile>){
+fn cmd_sort(n:i32, profile_data_store: &mut Vec<Profile>){
     match n {
         1 => profile_data_store.sort_by_key(|x| x.id),
         2 => profile_data_store.sort_by(|a, b| a.name.cmp(&b.name)),
@@ -85,7 +81,8 @@ fn cmd_sort(n:u32, profile_data_store: &mut Vec<Profile>){
         _ => println!("ERROR"),
     }
 }
-    
+   
+// コマンド判定
 fn exec_command(line: String, profile_data_store: &mut Vec<Profile>){
     let param: Vec<&str> = line.trim().split(' ').collect();
     match line.chars().nth(1) {
@@ -96,7 +93,7 @@ fn exec_command(line: String, profile_data_store: &mut Vec<Profile>){
             cmd_check(profile_data_store);
         },
         Some('P') => {
-            cmd_print(param[1].parse().unwrap(),profile_data_store);
+            cmd_print(param[1].parse::<i32>().unwrap(),profile_data_store);
         },
         Some('R') => {
             cmd_read(param[1].to_string(),profile_data_store);
@@ -108,7 +105,7 @@ fn exec_command(line: String, profile_data_store: &mut Vec<Profile>){
             cmd_find(param[1].to_string(),profile_data_store);
         },
         Some('S') => {
-            cmd_sort(param[1].parse().unwrap(),profile_data_store);
+            cmd_sort(param[1].parse::<i32>().unwrap(),profile_data_store);
         },
         Some(_) => {
             println!("No such command");
@@ -119,8 +116,8 @@ fn exec_command(line: String, profile_data_store: &mut Vec<Profile>){
    }
 }
     
-
-fn new_profile(line: String, profile_data_store: &mut Vec<Profile>) {
+// 登録
+fn new_profile(line: String, profile_data_store: &mut Vec<Profile>)  {
     let v: Vec<&str> = line.trim().split(',').collect();
 
     let profile = Profile{
@@ -131,11 +128,11 @@ fn new_profile(line: String, profile_data_store: &mut Vec<Profile>) {
         comment:  v[4].to_string(),
     };
     
-    
     profile_data_store.push(profile);
 }
 
-fn parse_line(line: String, profile_data_store: &mut Vec<Profile>){
+// command or csv data 判定
+fn parse_line(line: String, profile_data_store: &mut Vec<Profile>)  {
     if line.starts_with("%") {
         exec_command(line, profile_data_store);
     }else{
@@ -149,8 +146,6 @@ fn main() {
         let mut s = String::new();
         std::io::stdin().read_line(&mut s).ok();
     
-       parse_line(s, &mut profile_data_store)
-        
-
+        parse_line(s, &mut profile_data_store);
     }
 }
