@@ -86,33 +86,15 @@ fn cmd_sort(n:i32, profile_data_store: &mut Vec<Profile>){
 fn exec_command(line: String, profile_data_store: &mut Vec<Profile>){
     let param: Vec<&str> = line.trim().split(' ').collect();
     match line.chars().nth(1) {
-        Some('Q') => {
-            cmd_quit();
-        },
-        Some('C') => {
-            cmd_check(profile_data_store);
-        },
-        Some('P') => {
-            cmd_print(param[1].parse::<i32>().unwrap(),profile_data_store);
-        },
-        Some('R') => {
-            cmd_read(param[1].to_string(),profile_data_store);
-        },
-        Some('W') => {
-            cmd_write(param[1].to_string(),profile_data_store);
-        },
-        Some('F') => {
-            cmd_find(param[1].to_string(),profile_data_store);
-        },
-        Some('S') => {
-            cmd_sort(param[1].parse::<i32>().unwrap(),profile_data_store);
-        },
-        Some(_) => {
-            println!("No such command");
-        },
-        None => {
-            println!("None");
-        },
+        Some('Q') => cmd_quit(),
+        Some('C') => cmd_check(profile_data_store),
+        Some('P') => cmd_print(param[1].parse::<i32>().unwrap(),profile_data_store),
+        Some('R') => cmd_read(param[1].to_string(),profile_data_store),
+        Some('W') => cmd_write(param[1].to_string(),profile_data_store),
+        Some('F') => cmd_find(param[1].to_string(),profile_data_store),
+        Some('S') => cmd_sort(param[1].parse::<i32>().unwrap(),profile_data_store),
+        Some(_) => println!("No such command"),
+        None => println!("None"),
    }
 }
     
