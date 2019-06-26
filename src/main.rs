@@ -143,9 +143,9 @@ fn parse_line(line: String, profile_data_store: &mut Vec<Profile>)  {
 fn main() {
     let mut profile_data_store: Vec<Profile> = Vec::new();
     loop {
-        let mut s = String::new();
-        std::io::stdin().read_line(&mut s).ok();
+        let mut line = String::new();
+        std::io::stdin().read_line(&mut line).ok();
     
-        parse_line(s, &mut profile_data_store);
+        parse_line(line, &mut profile_data_store);
     }
 }
